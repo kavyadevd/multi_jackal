@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<!-- A bit misleading, all the jackal sims have GPS, but this one uses it to
+     create the map->odom transformation, rather than using a static TF. -->
+
+<launch>
+
+  <arg name="ns0"         default="jackal0"/>
+  <arg name="ns1"         default="jackal1"/>
+  <arg name="ns2"         default="jackal2"/>
+
+  <arg name="rviz"       default="false"/>
+  <arg name="config"     default="front_laser"/>
+  <arg name="config_id"  default="0"/>
+
+  <param name="inspection_geom" command="$(find xacro)/xacro --inorder '$(find cpr_inspection_gazebo)/urdf/inspection_geometry.urdf.xacro'" />
+  <arg name="world_name" default="$(find cpr_inspection_gazebo)/worlds/inspection_world.world"/>
+  <arg name="gui"        default="true"/>
+  <arg name="use_sim_time" default="true" />
+  <arg name="headless" default="false" />
+
+  <!--Load navigation and inspection waypoints into parameter server -->
+  <rosparam command="load" file="$(find multi_jackal_tutorials)/pose_goals_in_map.yaml" />
+  <rosparam command="load" file="$(find multi_jackal_tutorials)/inspection_pose_goals_in_map.yaml" />
+
+  <!-- Start Gazebo with an empty world. -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="0" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    <arg name="headless" value="$(arg headless)" />
+    <arg name="world_name" value="$(arg world_name)" />
+  </include>
+
+  <!-- Spawn objects in gazebo world-->
+  <node name="inspection_world_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -model inspection_geom -param inspection_geom -x 0 -y 0 -z 0 -Y 0" />
+
+  <!-- Spawn the robot 1. -->
+  <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
+    <arg name="ns"             value="$(arg ns0)"/>
+    <arg name="config"         value="$(arg config)"/>
+    <arg name="config_id"      value="$(arg config_id)"/>
+    <arg name="x"              value="0"/>
+    <arg name="y"              value="0"/>
+    <arg name="z"              value="1"/>
+    <arg name="use_move_base"  value="true"/>
+    <arg name="use_global_ekf" value="true"/>
+    <arg name="use_global_tf"  value="false"/>
+  </include>
+  <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns0)" respawn="true" output="screen"/>
+  <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns0)" respawn="false" output="screen"/>
+
+  <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
+    <arg name="ns"             value="$(arg ns1)"/>
+    <arg name="x"              value="0"/>
+    <arg name="y"              value="1"/>
+    <arg name="z"              value="1"/>
+    <arg name="config"         value="$(arg config)"/>
+    <arg name="config_id"      value="$(arg config_id)"/>
+    <arg name="use_move_base"  value="true"/>
+    <arg name="use_global_ekf" value="true"/>
+    <arg name="use_global_tf"  value="false"/>
+  </include>
+  <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns1)" respawn="true" output="screen"/>
+  <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns1)" respawn="false" output="screen"/>
+  <!--
+  <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
+    <arg name="ns"             value="$(arg ns2)"/>
+    <arg name="x"              value="0"/>
+    <arg name="y"              value="-1"/>
+    <arg name="z"              value="1"/>
+    <arg name="config"         value="$(arg config)"/>
+    <arg name="config_id"      value="$(arg config_id)"/>
+    <arg name="use_move_base"  value="true"/>
+    <arg name="use_global_ekf" value="true"/>
+    <arg name="use_global_tf"  value="false"/>
+  </include>
+  <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns2)" respawn="true" output="screen"/>
+  <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns2)" respawn="false" output="screen"/>
+-->
+
+  <group if="$(arg rviz)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multi_jackal_tutorials)/rviz/jackal_with_gps.rviz" >
+      <remap from="/move_base_simple/goal" to="/$(arg ns2)/move_base_simple/goal"/>
+    </node>
+  </group>
+
+</launch>

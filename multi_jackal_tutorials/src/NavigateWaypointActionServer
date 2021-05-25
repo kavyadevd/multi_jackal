@@ -1,0 +1,112 @@
+#! /usr/bin/env python
+from random import randint
+
+import rospy
+import actionlib
+import tf2_ros
+import tf2_geometry_msgs
+
+from geometry_msgs.msg import Pose
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+
+from multi_jackal_tutorials.msg import NavigateWaypointAction
+from multi_jackal_tutorials.msg import NavigateWaypointGoal
+from multi_jackal_tutorials.msg import NavigateWaypointFeedback
+from multi_jackal_tutorials.msg import NavigateWaypointResult
+
+def transform_pose(input_pose, from_frame, to_frame):
+    tf_buffer = tf2_ros.Buffer()
+    listener = tf2_ros.TransformListener(tf_buffer)
+
+    pose_stamped = tf2_geometry_msgs.PoseStamped()
+    pose_stamped.pose = input_pose
+    pose_stamped.header.frame_id = from_frame
+    pose_stamped.header.stamp = rospy.Time(0)
+
+    try:
+        output_pose_stamped = tf_buffer.transform(pose_stamped, to_frame, rospy.Duration(2))
+        return output_pose_stamped.pose
+
+    except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+        raise
+
+class NavigateWaypointActionServer(object):
+    def __init__(self, name):
+        # create messages that are used to publish feedback/result
+        self._feedback = NavigateWaypointFeedback()
+        self._result = NavigateWaypointResult()
+        self._ns = rospy.get_namespace()
+        self._action_name = name
+        self._as = actionlib.SimpleActionServer(self._action_name, NavigateWaypointAction, execute_cb=self.execute_cb, auto_start = False)
+
+        self._as.start()
+
+    def execute_cb(self, goal):
+        # helper variables
+        r = rospy.Rate(1)
+        success = True
+        param_name = "/Navigation_Waypoints/"+goal.destination
+        pose_goal = rospy.get_param(param_name)
+        #print pose_goal
+        rospy.loginfo('%s will navigate to %s' % (self._ns, goal.destination))
+
+
+        pose_goal_map_frame = Pose()
+
+        pose_goal_map_frame.position.x = pose_goal[0]
+        pose_goal_map_frame.position.y = pose_goal[1]
+        pose_goal_map_frame.position.z = pose_goal[2]
+
+        pose_goal_map_frame.orientation.x = pose_goal[3]
+        pose_goal_map_frame.orientation.y = pose_goal[4]
+        pose_goal_map_frame.orientation.z = pose_goal[5]
+        pose_goal_map_frame.orientation.w = pose_goal[6]
+
+
+        #print("Pose in map frame")
+        #print(pose_goal_map_frame)
+
+        frame_id = rospy.get_param(self._ns+"jackal_velocity_controller/odom_frame_id")
+        pose_goal_odom_frame = Pose()
+        pose_goal_odom_frame = transform_pose(pose_goal_map_frame, "map", frame_id)
+        #print("Pose in odom frame")
+        #print(pose_goal_odom_frame)
+        # publish info to the console for the user
+        #rospy.loginfo('%s: Was able to retrieve parameter - ' % (self._action_name, pose_goal) )
+
+        #setup action client for move base
+        client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
+        client.wait_for_server()
+        #create goal message
+        mb_goal = MoveBaseGoal()
+        #print frame_id
+        mb_goal.target_pose.header.frame_id = frame_id
+        mb_goal.target_pose.header.stamp = rospy.Time.now()
+        mb_goal.target_pose.pose = pose_goal_odom_frame
+        # send goal to move_base
+        #print(mb_goal)
+        client.send_goal(mb_goal)
+        wait = client.wait_for_result()
+        '''
+        print("Did first goal")
+        #print mb_goal
+        pose_goal2_odom_frame = Pose()
+        pose_goal2_odom_frame = transform_pose(pose_goal_map_frame, "map", frame_id)
+        mb_goal2 = MoveBaseGoal()
+        mb_goal2.target_pose.header.frame_id = frame_id
+        mb_goal2.target_pose.header.stamp = rospy.Time.now()
+        mb_goal2.target_pose.pose = pose_goal_odom_frame
+        print(mb_goal2)
+        client.send_goal(mb_goal2)
+        wait = client.wait_for_result()
+        print("Did second goal")
+        '''
+        if success:
+            self._result.success = 1
+            rospy.loginfo('%s: Succeeded' % self._action_name)
+            self._as.set_succeeded(self._result)
+
+if __name__ == '__main__':
+    rospy.init_node('tb1_Navigate')
+    server = NavigateWaypointActionServer(rospy.get_name())
+    rospy.spin()
