@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- This URDF should be loaded into a ROS parameter using xacro, then loaded 
+<!-- This URDF should be loaded into a ROS parameter using xacro, then loaded
      into Gazebo using robot state publisher.
      Requires the arguments: $namespace, $id -->
 <robot name="jackal" xmlns:xacro="http://www.ros.org/wiki/xacro">
@@ -15,7 +15,7 @@
   <xacro:property name="chassis_height"            value="0.184" />
   <xacro:property name="dummy_inertia"             value="1e-09"/>
   <xacro:property name="mount_spacing"             value="0.120" />
- 
+
   <material name="dark_grey"><color rgba=" 0.2 0.2 0.2 1.0" /></material>
   <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0" /></material>
   <material name="yellow"><color rgba="0.8 0.8 0.0 1.0" /></material>
@@ -182,14 +182,27 @@
     <child link="front_mount" />
     <origin xyz="${mount_spacing} 0 0" />
   </joint>
-  
+
   <!-- Bring in simulation data for Gazebo. -->
   <xacro:include filename="jackal.gazebo" />
 
   <!-- Optional standard accessories, as supplied by Clearpath.-->
   <xacro:include filename="base_accessories.urdf.xacro" />
-  
+
   <!-- Optional custom accessories. -->
   <xacro:include filename="custom_accessories.urdf.xacro" />
-  
+
+  <gazebo>
+  <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+    <alwaysOn>true</alwaysOn>
+    <updateRate>50.0</updateRate>
+    <bodyName>base_link</bodyName>
+    <topicName>ground_truth/state</topicName>
+    <gaussianNoise>0.01</gaussianNoise>
+    <frameName>world</frameName>
+    <xyzOffsets>0 0 0</xyzOffsets>
+    <rpyOffsets>0 0 0</rpyOffsets>
+  </plugin>
+</gazebo>
+
 </robot>
