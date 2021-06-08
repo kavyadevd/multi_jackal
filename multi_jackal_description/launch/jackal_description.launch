@@ -18,7 +18,7 @@
          command="$(find multi_jackal_description)/scripts/env_run
                   $(find multi_jackal_description)/urdf/configs/$(arg config)
                   $(find xacro)/xacro '$(find multi_jackal_description)/urdf/jackal.urdf.xacro' 
-                      '--inorder' 'namespace:=$(arg ns)' 'config_id:=$(arg config_id)'
+                      'namespace:=$(arg ns)' 'config_id:=$(arg config_id)'
                       'gps_rate:=$(arg gps_rate)' 'gps_drift:=$(arg gps_drift)'" />
 
   <!-- Publish the robot joints. -->
