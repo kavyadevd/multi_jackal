@@ -6,15 +6,16 @@
 <launch>
 
   <arg name="ns"        default="jackal0"/>
-  <arg name="gui"       default="false"/>
+  <arg name="gui"       default="true"/>
   <arg name="rviz"      default="true"/>
-  <arg name="config"    default="base"/>
+  <!-- <arg name="config"    default="base"/> -->
+  <arg name="config"     default="front_laser"/> 
   <arg name="config_id" default="0"/>
 
   <!-- Start Gazebo with an empty world. -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="use_sim_time" value="true"/>
-    <arg name="gui"          value="true"/>
+    <arg name="gui"          value="$(arg gui)"/>
     <arg name="world_name"   value="$(find multi_jackal_tutorials)/worlds/empty.world"/>
   </include>
 
