@@ -52,8 +52,6 @@
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns0)" respawn="true" output="screen"/>
   <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns0)" respawn="true" output="screen"/>
 
-  <!-- <include file="$(find warthog_gazebo)/launch/spawn_warthog.launch" /> -->
-
   <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
     <arg name="ns"             value="$(arg ns1)"/>
     <arg name="x"              value="-23"/>
@@ -81,6 +79,8 @@
   </include>
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns2)" respawn="true" output="screen"/>
   <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns2)" respawn="true" output="screen"/>
+
+  <!-- <include file="$(find warthog_gazebo)/launch/spawn_warthog.launch" /> -->
 
   <group if="$(arg rviz)">
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multi_jackal_tutorials)/rviz/jackal_with_gps.rviz" >
