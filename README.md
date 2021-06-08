@@ -1,4 +1,4 @@
-# Multi-Jackal Simulator using Gazebo ROS
+# Multi-Jackal Simulator using Gazebo ROS Noetic
 
 The ROS documentation can be found [here](http://wiki.ros.org/multi_jackal_tutorials).
 # Overview
