@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 from random import randint
 
 import rospy
@@ -47,7 +47,7 @@ class NavigateWaypointActionServer(object):
         success = True
         param_name = "/Navigation_Waypoints/"+goal.destination
         pose_goal = rospy.get_param(param_name)
-        #print pose_goal
+        #print(pose_goal)
         rospy.loginfo('%s will navigate to %s' % (self._ns, goal.destination))
 
 
@@ -89,7 +89,7 @@ class NavigateWaypointActionServer(object):
         wait = client.wait_for_result()
         '''
         print("Did first goal")
-        #print mb_goal
+        #print(mb_goal)
         pose_goal2_odom_frame = Pose()
         pose_goal2_odom_frame = transform_pose(pose_goal_map_frame, "map", frame_id)
         mb_goal2 = MoveBaseGoal()
