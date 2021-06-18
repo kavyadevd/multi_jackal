@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<!-- A bit misleading, all the jackal sims have GPS, but this one uses it to
+     create the map->odom transformation, rather than using a static TF. -->
+
+<launch>
+
+  <arg name="ns"        default="jackal0"/>
+  <node pkg="multi_jackal_tutorials" type="CheckBatteryActionServer" name="CheckBatteryActionServer" ns="$(arg ns0)" respawn="true" output="screen"/>
+  <node pkg="multi_jackal_tutorials" type="ChargeActionServer" name="ChargeActionServer" ns="$(arg ns0)" respawn="true" output="screen"/>
+
+
+</launch>
