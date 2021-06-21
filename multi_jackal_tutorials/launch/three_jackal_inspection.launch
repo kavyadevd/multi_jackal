@@ -32,7 +32,6 @@
     <arg name="headless" value="$(arg headless)" />
     <arg name="world_name" value="$(arg world_name)" />
   </include>
-
   <!-- Spawn objects in gazebo world-->
   <node name="inspection_world_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -model inspection_geom -param inspection_geom -x 0 -y 0 -z 0 -Y 0" />
 
@@ -41,10 +40,9 @@
     <arg name="ns"             value="$(arg ns0)"/>
     <arg name="config"         value="$(arg config)"/>
     <arg name="config_id"      value="$(arg config_id)"/>
-    <arg name="x"              value="-23.0"/>
-    <arg name="y"              value="0.0"/>
-    <arg name="z"              value="3.0"/>
-    <arg name="yaw"            value="0.0"/>
+    <arg name="x"              value="-10.5"/>
+    <arg name="y"              value="8"/>
+    <arg name="z"              value="1.5"/>
     <arg name="use_move_base"  value="true"/>
     <arg name="use_global_ekf" value="true"/>
     <arg name="use_global_tf"  value="false"/>
@@ -54,9 +52,9 @@
 
   <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
     <arg name="ns"             value="$(arg ns1)"/>
-    <arg name="x"              value="-23"/>
-    <arg name="y"              value="1.0"/>
-    <arg name="z"              value="3.0"/>
+    <arg name="x"              value="-12"/>
+    <arg name="y"              value="7.8"/>
+    <arg name="z"              value="1.5"/>
     <arg name="config"         value="$(arg config)"/>
     <arg name="config_id"      value="$(arg config_id)"/>
     <arg name="use_move_base"  value="true"/>
@@ -64,13 +62,14 @@
     <arg name="use_global_tf"  value="false"/>
   </include>
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns1)" respawn="true" output="screen"/>
-  <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns1)" respawn="true" output="screen"/>
+
+  <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns1)" respawn="false" output="screen"/>
 
   <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
     <arg name="ns"             value="$(arg ns2)"/>
-    <arg name="x"              value="-23"/>
-    <arg name="y"              value="-1.0"/>
-    <arg name="z"              value="3.0"/>
+    <arg name="x"              value="-8.3"/>
+    <arg name="y"              value="8.25"/>
+    <arg name="z"              value="1.5"/>
     <arg name="config"         value="$(arg config)"/>
     <arg name="config_id"      value="$(arg config_id)"/>
     <arg name="use_move_base"  value="true"/>
@@ -78,12 +77,13 @@
     <arg name="use_global_tf"  value="false"/>
   </include>
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns2)" respawn="true" output="screen"/>
+
   <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns2)" respawn="true" output="screen"/>
 
   <!-- <include file="$(find warthog_gazebo)/launch/spawn_warthog.launch" /> -->
 
   <group if="$(arg rviz)">
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multi_jackal_tutorials)/rviz/jackal_with_gps.rviz" >
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multi_jackal_tutorials)/rviz/three_jackal_inspection.rviz" >
       <remap from="/move_base_simple/goal" to="/$(arg ns2)/move_base_simple/goal"/>
     </node>
   </group>

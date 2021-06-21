@@ -8,8 +8,8 @@
   <arg name="ns"        default="jackal"/>
   <arg name="config"    default="base" />
   <arg name="config_id" default="0"/>
-  <arg name="gps_rate"  default="1"/>
-  <arg name="gps_drift" default="0.0001"/>
+  <arg name="gps_rate"  default="10"/>
+  <arg name="gps_drift" default="0.0000"/>
 
   <!-- Get the robot description. The second line in command just sets a flag
      which is used in accessories.urdf.xacro. The third calls xacro to load

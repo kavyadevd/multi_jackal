@@ -16,6 +16,8 @@ from multi_jackal_tutorials.msg import InspectWaypointGoal
 from multi_jackal_tutorials.msg import InspectWaypointFeedback
 from multi_jackal_tutorials.msg import InspectWaypointResult
 
+map_frame_id = "map"
+
 def transform_pose(input_pose, from_frame, to_frame):
     tf_buffer = tf2_ros.Buffer()
     listener = tf2_ros.TransformListener(tf_buffer)
@@ -31,6 +33,17 @@ def transform_pose(input_pose, from_frame, to_frame):
 
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
         raise
+
+def convert_pose_list_to_obj(pose_in_list):
+    output_pose = Pose()
+    output_pose.position.x = pose_in_list[0]
+    output_pose.position.y = pose_in_list[1]
+    output_pose.position.z = pose_in_list[2]
+    output_pose.orientation.x = pose_in_list[3]
+    output_pose.orientation.y = pose_in_list[4]
+    output_pose.orientation.z = pose_in_list[5]
+    output_pose.orientation.w = pose_in_list[6]
+    return output_pose
 
 class InspectWaypointActionServer(object):
     def __init__(self, name):
@@ -57,30 +70,15 @@ class InspectWaypointActionServer(object):
         for pose_name in pose_list.keys():
             pose_goal = pose_list[pose_name]
             #print(pose_goal)
-
-            current_pose_goal_in_map = Pose()
-
-            current_pose_goal_in_map.position.x = pose_goal[0]
-            current_pose_goal_in_map.position.y = pose_goal[1]
-            current_pose_goal_in_map.position.z = pose_goal[2]
-
-            current_pose_goal_in_map.orientation.x = pose_goal[3]
-            current_pose_goal_in_map.orientation.y = pose_goal[4]
-            current_pose_goal_in_map.orientation.z = pose_goal[5]
-            current_pose_goal_in_map.orientation.w = pose_goal[6]
-
-            current_pose_goal_in_odom = Pose()
-            current_pose_goal_in_odom = transform_pose(current_pose_goal_in_map, "map", frame_id)
-
-            #print(current_pose_goal_in_odom)
+            PoseGoal = convert_pose_list_to_obj(pose_goal)
 
             client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
             client.wait_for_server()
             mb_goal = MoveBaseGoal()
 
-            mb_goal.target_pose.header.frame_id = frame_id
+            mb_goal.target_pose.header.frame_id = map_frame_id
             mb_goal.target_pose.header.stamp = rospy.Time.now()
-            mb_goal.target_pose.pose = current_pose_goal_in_odom
+            mb_goal.target_pose.pose = PoseGoal
 
             client.send_goal(mb_goal)
             wait = client.wait_for_result()
