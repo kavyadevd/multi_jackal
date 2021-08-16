@@ -4,7 +4,7 @@ project(multi_jackal_tutorials)
 find_package(catkin REQUIRED COMPONENTS roslaunch genmsg actionlib_msgs actionlib rospy std_msgs)
 find_package(geometry_msgs)
 
-add_action_files(DIRECTORY action FILES NavigateWaypoint.action InspectWaypoint.action CheckBattery.action Charge.action)
+add_action_files(DIRECTORY action FILES NavigateWaypoint.action InspectWaypoint.action ChargeJackal.action ChargeWarthog.action)
 
 catkin_python_setup()
 

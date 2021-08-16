@@ -1,0 +1,9 @@
+jackal0: {
+    battery_mockup/battery_autonomy: 400,
+}
+jackal1: {
+    battery_mockup/battery_autonomy: 400,
+}
+jackal2: {
+    battery_mockup/battery_autonomy: 400,
+  }

@@ -1,0 +1,53 @@
+#! /usr/bin/env python
+from random import randint
+
+import rospy
+import actionlib
+import tf2_ros
+import tf2_geometry_msgs
+
+from geometry_msgs.msg import Pose
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from std_srvs.srv import Empty
+
+from multi_jackal_tutorials.msg import NavigateWaypointAction
+from multi_jackal_tutorials.msg import NavigateWaypointGoal
+
+from multi_jackal_tutorials.msg import InspectWaypointAction
+from multi_jackal_tutorials.msg import InspectWaypointGoal
+
+map_frame_id = "map"
+
+def TestingJackal1():
+    rospy.init_node('testing')
+    rospy.loginfo('Reaching Here')
+    NavigateAC = actionlib.SimpleActionClient('NavigateWaypointActionServer',NavigateWaypointAction)
+    NavigateAC.wait_for_server()
+    rospy.loginfo('Reaching Here')
+    InspectAC = actionlib.SimpleActionClient('InspectWaypointActionServer',InspectWaypointAction)
+    InspectAC.wait_for_server()
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+
+        goal = NavigateWaypointGoal()
+        goal.origin = "center"
+        goal.destination = "panel4"
+        NavigateAC.send_goal(goal)
+        wait = NavigateAC.wait_for_result()
+
+        goal = InspectWaypointGoal()
+        goal.waypoint = "panel4"
+        InspectAC.send_goal(goal)
+        wait = InspectAC.wait_for_result()
+
+        goal = NavigateWaypointGoal()
+        goal.origin = "panel4"
+        goal.destination = "center"
+        NavigateAC.send_goal(goal)
+        wait = NavigateAC.wait_for_result()
+
+if __name__ == '__main__':
+    try:
+        TestingJackal1()
+    except rospy.ROSInterruptException:
+        pass

@@ -1,0 +1,52 @@
+#! /usr/bin/env python
+import rospy
+import actionlib
+import dynamic_reconfigure.client
+
+import tf2_ros
+import tf2_geometry_msgs
+
+from tf.transformations import quaternion_from_euler, euler_from_quaternion
+from geometry_msgs.msg  import Pose, Twist
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+
+from std_srvs.srv import Empty
+from std_msgs.msg import String
+
+from multi_jackal_tutorials.msg import ChargeWarthogAction
+from multi_jackal_tutorials.msg import ChargeWarthogGoal
+from multi_jackal_tutorials.msg import ChargeWarthogFeedback
+from multi_jackal_tutorials.msg import ChargeWarthogResult
+
+class ChargeWarthogActionServer(object):
+    def __init__(self, name):
+        # create messages that are used to publish feedback/result
+        self._feedback = ChargeWarthogFeedback()
+        self._result = ChargeWarthogResult()
+        self._ns = rospy.get_namespace()
+        self._action_name = name
+        self._as = actionlib.SimpleActionServer(self._action_name, ChargeWarthogAction, execute_cb=self.execute_cb, auto_start = False)
+
+        self._tf_buffer = tf2_ros.Buffer()
+        self._tf_listener = tf2_ros.TransformListener(self._tf_buffer)
+
+        self._as.start()
+
+    def execute_cb(self, goal):
+        # helper variables
+        r = rospy.Rate(1)
+        success = True
+
+        print("Started warthog charging action server")
+        done_charging_subscriber = rospy.wait_for_message('/done_charging', String)
+        print("Received message jackal is done")
+
+        if success:
+            self._result.success = 1
+            rospy.loginfo('%s: Succeeded' % self._action_name)
+            self._as.set_succeeded(self._result)
+
+if __name__ == '__main__':
+    rospy.init_node('tb1_Navigate')
+    server = ChargeWarthogActionServer(rospy.get_name())
+    rospy.spin()
