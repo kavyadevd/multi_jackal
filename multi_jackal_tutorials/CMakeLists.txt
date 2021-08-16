@@ -13,7 +13,6 @@ generate_messages(DEPENDENCIES actionlib_msgs std_msgs geometry_msgs)
 
 catkin_package()
 
-
 roslaunch_add_file_check(launch/one_jackal.launch)
 roslaunch_add_file_check(launch/two_jackal.launch)
 roslaunch_add_file_check(launch/three_jackal.launch)

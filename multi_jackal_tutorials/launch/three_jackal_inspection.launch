@@ -11,6 +11,7 @@
   <arg name="warthog_ns"  default="warthog"/>
 
   <arg name="rviz"       default="false"/>
+  <!-- <arg name="config"     default="base"/> -->
   <arg name="config"     default="front_laser"/>
   <arg name="config_id"  default="0"/>
 
@@ -75,6 +76,7 @@
     <arg name="fake_battery"          value="$(arg use_battery)" />
   </include>
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns1)" respawn="true" output="screen"/>
+
   <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns1)" respawn="false" output="screen"/>
 
 
