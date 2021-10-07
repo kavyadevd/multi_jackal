@@ -68,6 +68,8 @@ class NavigateWaypointActionServer(object):
 
         param_name = self._navigation_waypoints+goal.destination
         pose_goal_list = rospy.get_param(param_name)
+        print(pose_goal_list)
+        print(param_name)
         PoseGoal = convert_pose_list_to_obj(pose_goal_list)
         
         clear_service_name = self._ns+"move_base/clear_costmaps"

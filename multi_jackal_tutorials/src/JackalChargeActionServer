@@ -20,11 +20,11 @@ from multi_jackal_tutorials.msg import ChargeJackalResult
 
 from battery_mockup.msg import ChargeAction, ChargeGoal, ChargeResult
 
-goal_ahead_of_charging = 0.5
+goal_ahead_of_charging = 0.7
 
 charging_pose_in_laser_frame = Pose()
 charging_pose_in_laser_frame.position.x = goal_ahead_of_charging
-charging_pose_in_laser_frame.position.y = 0.0
+charging_pose_in_laser_frame.position.y = 0.225
 charging_pose_in_laser_frame.position.z = 0.0
 charging_pose_in_laser_frame.orientation.w = 1
 
@@ -137,11 +137,11 @@ class ChargeJackalActionServer(object):
         #Backup into Warthog
         cmd_vel_publisher = rospy.Publisher(self._ns + cmd_vel_topic , Twist)
         backup_command = Twist()
-        speed = 0.5
+        speed = 0.25
         backup_command.linear.x = -speed
         t0 = rospy.Time.now().to_sec()
         current_distance = 0
-        while ( current_distance < (goal_ahead_of_charging+0.25) ):
+        while ( current_distance < (goal_ahead_of_charging) ):
             cmd_vel_publisher.publish(backup_command)
             t1=rospy.Time.now().to_sec()
             current_distance= speed*(t1-t0)
@@ -162,11 +162,11 @@ class ChargeJackalActionServer(object):
 
         #Release from Warthog
         release_command = Twist()
-        speed = 0.5
+        speed = 0.25
         release_command.linear.x = speed
         t0 = rospy.Time.now().to_sec()
         current_distance = 0
-        while ( current_distance < (goal_ahead_of_charging+0.25) ):
+        while ( current_distance < (goal_ahead_of_charging) ):
             cmd_vel_publisher.publish(release_command)
             t1=rospy.Time.now().to_sec()
             current_distance= speed*(t1-t0)

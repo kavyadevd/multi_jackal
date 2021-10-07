@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Warthog configuration to view. See warthog_description for details. -->
+  <arg name="config" default="base"/>
+
+  <include file="$(find multi_jackal_description)/launch/jackal_description.launch">
+    <arg name="config" value="$(arg config)" />
+  </include>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multi_jackal_tutorials)/rviz/model.rviz" />
+</launch>

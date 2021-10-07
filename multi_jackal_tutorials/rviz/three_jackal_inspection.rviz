@@ -4,13 +4,16 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /RobotModels1
+        - /RobotModels1/Jackal0-RobotModel1
+        - /RobotModels1/Jackal0-RobotModel1/Links1
+        - /RobotModels1/RobotModel1
         - /InteractiveMarkers1
         - /GoalPlanning1
         - /GoalPlanning1/Jackal0-PlannedPath1
         - /Ground Truth1/Warthog-GroundTruth1
-        - /Map1
-        - /Jackal0-PlannedPath1
-      Splitter Ratio: 0.5638890266418457
+        - /Jackal0-CostMap1
+      Splitter Ratio: 0.7528409361839294
     Tree Height: 806
   - Class: rviz/Selection
     Name: Selection
@@ -108,6 +111,11 @@ Visualization Manager:
               Show Axes: false
               Show Trail: false
             chassis_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            chefs_hat_link:
               Alpha: 1
               Show Axes: false
               Show Trail: false
@@ -430,13 +438,13 @@ Visualization Manager:
           Value: true
         - Class: rviz/InteractiveMarkers
           Enable Transparency: true
-          Enabled: true
+          Enabled: false
           Name: Warthog-InteractiveMarkers
           Show Axes: false
           Show Descriptions: true
           Show Visual Aids: false
           Update Topic: /warthog/twist_marker_server/update
-          Value: true
+          Value: false
       Enabled: true
       Name: InteractiveMarkers
     - Class: rviz/Group
@@ -514,12 +522,12 @@ Visualization Manager:
           Class: rviz/Map
           Color Scheme: map
           Draw Behind: false
-          Enabled: true
+          Enabled: false
           Name: Jackal0-CostMap
           Topic: /jackal0/move_base/global_costmap/costmap
           Unreliable: false
           Use Timestamp: false
-          Value: true
+          Value: false
         - Alpha: 0.699999988079071
           Class: rviz/Map
           Color Scheme: map
@@ -769,16 +777,6 @@ Visualization Manager:
           Value: true
       Enabled: false
       Name: Ground Truth
-    - Alpha: 0.699999988079071
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
-      Enabled: false
-      Name: Map
-      Topic: /warthog/move_base/global_costmap/costmap
-      Unreliable: false
-      Use Timestamp: false
-      Value: false
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
@@ -802,6 +800,16 @@ Visualization Manager:
       Topic: /warthog/move_base/TrajectoryPlannerROS/local_plan
       Unreliable: false
       Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: false
+      Name: Jackal0-CostMap
+      Topic: /warthog/move_base/local_costmap/costmap
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -830,25 +838,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.6914055943489075
+      Distance: 0.6822226047515869
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -12.003273963928223
-        Y: 16.752212524414062
-        Z: 15.928431510925293
+        X: -10.578719139099121
+        Y: 14.539666175842285
+        Z: 8.392409324645996
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.9747968912124634
+      Pitch: 0.8647968769073486
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.2390589714050293
+      Yaw: 1.4090629816055298
     Saved: ~
 Window Geometry:
   Displays:
