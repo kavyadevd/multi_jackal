@@ -65,11 +65,17 @@ class InspectWaypointActionServer(object):
         frame_id = rospy.get_param(self._ns+"jackal_velocity_controller/odom_frame_id")
 
         rospy.loginfo('%s will inspect %s' % (self._ns, goal.waypoint))
+        starting_time = rospy.get_time()
 
-        print(pose_list.keys())
-        for pose_name in pose_list.keys():
+        list_of_poses = list(pose_list.keys())
+        print(list_of_poses)
+        n_inspections = 0
+        n_poses = len(list_of_poses)
+
+        while(rospy.get_time()-starting_time < 90):
+            pose_number = n_inspections%n_poses
+            pose_name = list_of_poses[pose_number]
             pose_goal = pose_list[pose_name]
-            #print(pose_goal)
             PoseGoal = convert_pose_list_to_obj(pose_goal)
 
             client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
@@ -82,6 +88,8 @@ class InspectWaypointActionServer(object):
 
             client.send_goal(mb_goal)
             wait = client.wait_for_result()
+
+            n_inspections+=1
 
         if success:
             self._result.success = 1

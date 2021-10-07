@@ -10,7 +10,7 @@
   <arg name="ns2"         default="jackal2"/>
   <arg name="warthog_ns"  default="warthog"/>
 
-  <arg name="rviz"       default="false"/>
+  <arg name="rviz"       default="true"/>
   <!-- <arg name="config"     default="base"/> -->
   <arg name="config"     default="front_laser"/>
   <arg name="config_id"  default="0"/>
@@ -49,7 +49,7 @@
     <arg name="config"         value="$(arg config)"/>
     <arg name="config_id"      value="$(arg config_id)"/>
     <arg name="x"              value="-10.5"/>
-    <arg name="y"              value="8"/>
+    <arg name="y"              value="8.25"/>
     <arg name="z"              value="1.5"/>
     <arg name="use_move_base"  value="true"/>
     <arg name="use_global_ekf" value="false"/>
@@ -62,10 +62,10 @@
   <node pkg="multi_jackal_tutorials" type="JackalChargeActionServer" name="ChargeJackalActionServer" ns="$(arg ns0)" respawn="false" output="screen"/>
 
 
-  <!-- <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
+  <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
     <arg name="ns"             value="$(arg ns1)"/>
     <arg name="x"              value="-12"/>
-    <arg name="y"              value="7.8"/>
+    <arg name="y"              value="8.25"/>
     <arg name="z"              value="1.5"/>
     <arg name="config"         value="$(arg config)"/>
     <arg name="config_id"      value="$(arg config_id)"/>
@@ -76,9 +76,8 @@
     <arg name="fake_battery"          value="$(arg use_battery)" />
   </include>
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns1)" respawn="true" output="screen"/>
-
   <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns1)" respawn="false" output="screen"/>
-
+  <node pkg="multi_jackal_tutorials" type="JackalChargeActionServer" name="ChargeJackalActionServer" ns="$(arg ns1)" respawn="false" output="screen"/>
 
 
   <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
@@ -95,17 +94,22 @@
     <arg name="fake_battery"          value="$(arg use_battery)" />
   </include>
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg ns2)" respawn="true" output="screen"/>
-  <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns2)" respawn="false" output="screen"/> -->
+  <node pkg="multi_jackal_tutorials" type="InspectWaypointActionServer" name="InspectWaypointActionServer" ns="$(arg ns2)" respawn="false" output="screen"/>
+  <node pkg="multi_jackal_tutorials" type="JackalChargeActionServer" name="ChargeJackalActionServer" ns="$(arg ns2)" respawn="false" output="screen"/>
+
 
   <include file="$(find multi_warthog_base)/launch/warthog_base.launch">
     <arg name="ns0"           value="$(arg warthog_ns)" />
     <arg name="config"        value="base" />
     <arg name="x"              value="-12"/>
-    <arg name="y"              value="7.8"/>
+    <arg name="y"              value="6.8"/>
     <arg name="z"              value="1.5"/>
   </include>
   <node pkg="multi_jackal_tutorials" type="NavigateWaypointActionServer" name="NavigateWaypointActionServer" ns="$(arg warthog_ns)" respawn="true" output="screen"/>
   <node pkg="multi_jackal_tutorials" type="WarthogChargeActionServer" name="ChargeWarthogActionServer" ns="$(arg warthog_ns)" respawn="false" output="screen"/>
+
+  <node pkg="battery_mockup" type="StartBattery" name="StartBattery" respawn="false" output="screen"/>
+
 
   <group if="$(arg rviz)">
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multi_jackal_tutorials)/rviz/three_jackal_inspection.rviz" >

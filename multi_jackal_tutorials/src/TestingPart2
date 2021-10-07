@@ -19,7 +19,7 @@ from multi_jackal_tutorials.msg import InspectWaypointGoal
 map_frame_id = "map"
 
 def TestingJackal1():
-    rospy.init_node('testing')
+    rospy.init_node('testing1')
     rospy.loginfo('Reaching Here')
     NavigateAC = actionlib.SimpleActionClient('NavigateWaypointActionServer',NavigateWaypointAction)
     NavigateAC.wait_for_server()
