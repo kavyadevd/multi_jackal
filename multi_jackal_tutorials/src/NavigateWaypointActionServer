@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 from random import randint
 
 import rospy
@@ -71,6 +71,7 @@ class NavigateWaypointActionServer(object):
         print(pose_goal_list)
         print(param_name)
         PoseGoal = convert_pose_list_to_obj(pose_goal_list)
+<<<<<<< HEAD
 
         clear_service_name = self._ns+"move_base/clear_costmaps"
         print(clear_service_name)
@@ -81,6 +82,8 @@ class NavigateWaypointActionServer(object):
         print("response")
         response = clearcmp()
         print("cleared")
+=======
+>>>>>>> 5922df50dedb86ccc93f4428a35076df09c42776
 
         rospy.loginfo('%s will navigate from %s to %s' % (self._ns, goal.origin, goal.destination))
 
