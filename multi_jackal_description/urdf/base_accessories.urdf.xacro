@@ -10,7 +10,7 @@
   <!-- If enabled, generate the LASER payload (by default, a SICK LMS111). -->
   <xacro:include filename="accessories/sick_lms1xx_mount.urdf.xacro" />
   <xacro:if value="$(optenv JACKAL_LASER 0)">
-    <sick_lms1xx_mount prefix="$(optenv JACKAL_LASER_MOUNT front)"
+    <xacro:sick_lms1xx_mount prefix="$(optenv JACKAL_LASER_MOUNT front)"
                        topic="$(optenv JACKAL_LASER_TOPIC front/scan)"
                        min_angle="-1.4"
                        max_angle="1.4" />
