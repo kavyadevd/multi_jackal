@@ -1,0 +1,9 @@
+#Goal
+int32 time
+---
+#Result
+int32 success
+string result
+---
+#feedback
+geometry_msgs/Pose pose
